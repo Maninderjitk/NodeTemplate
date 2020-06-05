@@ -7,14 +7,15 @@ var bookRouter = require("./routes/books");
 var authorRouter = require("./routes/author");
 var indexRouter = require("./routes/index");
 var usersRouter = require("./routes/users");
-var Book=require("./models/books");
-var Author=require("./models/author")
-var User=require("./models/user");
+var refreshToken=require("./routes/refresh-token")
+var Book = require("./models/books");
+var Author = require("./models/author");
+var User = require("./models/user");
 
 require("./db/mongoose");
 
 var app = express();
-const port = process.env.PORT || 3000;
+const port = 3001;
 app.use(express.json());
 
 // view engine setup
@@ -29,10 +30,9 @@ app.use(express.static(path.join(__dirname, "public")));
 
 app.use("/", indexRouter);
 app.use("/book", bookRouter);
-app.use("/author",authorRouter);
+app.use("/author", authorRouter);
 app.use("/users", usersRouter);
-
-
+app.use("/token",refreshToken);
 
 // catch 404 and forward to error handler
 app.use(function (req, res, next) {

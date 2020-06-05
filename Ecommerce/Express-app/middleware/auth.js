@@ -6,9 +6,9 @@ const auth = async (req, res, next) => {
   // try {
   console.log("in auth-------");
 
-  // const token = req.header('Authorization').replace('Bearer', '');
-  const token = req.header("Authorization");
-  console.log("in auth1-------",token);
+   const token = req.header('Authorization').replace('Bearer ', '');
+  // const token = req.header("Authorization");
+  // console.log("in auth1-------",token);
   // const decoded= jwt_decode(token);
   // console.log("decoded-------",decoded)
   const decoded = await jwt.verify(token, "thisismynewcourse");

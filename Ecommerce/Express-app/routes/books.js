@@ -1,9 +1,22 @@
 const express = require("express");
 const Book = require("../models/books");
 const router = new express.Router();
-const auth=require('../middleware/auth')
+const auth = require("../middleware/auth");
+const Joi = require('@hapi/joi');
 
-router.post("/create", async (req, res) => {
+router.post("/create",auth, async (req, res) => {
+  const schema = Joi.object({
+    title: Joi.string().required(),
+    price: Joi.number().required(),
+    page_count: Joi.number().required(),
+    image_url: Joi.string(),
+    description: Joi.string().required().required(),
+    author: Joi.string().required(),
+  });
+  const { error, value } = schema.validate(req.body);
+  if (error) {
+    return res.send(error.details[0].message);
+  }
   const book = new Book(req.body);
   try {
     await book.save();

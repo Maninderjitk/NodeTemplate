@@ -2,11 +2,23 @@ const express = require("express");
 const Author = require("../models/author");
 const router = new express.Router();
 var auth=require('../middleware/auth');
-var pino = require('express-pino-logger')()
+var pino = require('express-pino-logger')();
+const Joi = require('@hapi/joi');
  
 router.use(pino);
 
-router.post("/create", async (req, res) => {
+router.post("/create", auth,async (req, res) => {
+  const schema = Joi.object({
+    name:Joi.string().required(),
+    books:Joi.array().items(Joi.string()).required(),
+    image_url:Joi.string(),
+    description:Joi.string().required(),
+    // exp:Joi.number()
+  })
+  const { error, value } = schema.validate(req.body);
+  if(error){
+   return  res.send(error.details[0].message);
+  }
   const author = new Author(req.body);
   try {
     await author.save();
